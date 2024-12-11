@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.modules;
 
 import java.time.LocalDate;
 
@@ -14,18 +14,18 @@ import java.time.LocalDate;
  * @since 0.1
  */
 public class Grocery {
-  private String name;
+  private final String name;
   private String unit;
   private double amount;
-  private double price;
-  private LocalDate expiryDate;
+  private final double price;
+  private final LocalDate expiryDate;
 
   /**
    * .Constructor for the Grocery class.
    *
    * @param name is the name of the grocery.
    * @param unit is String declaring a given unit that grocery will be measured as, e.g. grams or
-   *             milliliters.
+   *             liters.
    * @param amount is a double the amount of the given unit.
    * @param price is a double representing the price per unit the grocery was bought for.
    * @param expiryDate is the expiry date of the grocery.
@@ -37,4 +37,33 @@ public class Grocery {
     this.price = price;
     this.expiryDate = expiryDate;
   }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getUnit() {
+    return unit;
+  }
+
+  public double getAmount() {
+    return amount;
+  }
+
+  public double getPrice() {
+    return price;
+  }
+
+  public LocalDate getExpiryDate() {
+    return expiryDate;
+  }
+
+  public void setAmount(double amount) {
+    this.amount = amount;
+  }
+
+  public void setUnit(String unit) {
+    this.unit = unit;
+  }
+
 }
