@@ -28,7 +28,7 @@ public class Grocery {
    *             liters.
    * @param amount is a double the amount of the given unit.
    * @param price is a double representing the price per unit the grocery was bought for.
-   * @param expiryDate is the expiry date of the grocery.
+   * @param expiryDate is a {@code LocalDate} representing the expiry date of the grocery.
    */
   public Grocery(String name, String unit, double amount, double price, LocalDate expiryDate) {
     this.name = name;
@@ -66,4 +66,9 @@ public class Grocery {
     this.unit = unit;
   }
 
+  @Override
+  public String toString() {
+    return "Grocery{" + "name='" + name + '\'' + ", unit='" + unit + ", amount=" + '\'' + amount
+        + ", price=" + price + ", expiryDate=" + expiryDate + '}';
+  }
 }
