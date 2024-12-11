@@ -14,5 +14,13 @@ public class Recipe {
   private String name;
   private String description;
   private String instructions;
-  private ArrayList<Grocery> groceries = new ArrayList<>();
+  private ArrayList<Grocery> groceries;
+
+  public Recipe(String name, String description, String instructions,
+      ArrayList<Grocery> groceries) {
+    this.name = name;
+    this.description = description;
+    this.instructions = instructions;
+    this.groceries = groceries;
+  }
 }

@@ -23,6 +23,10 @@ public class FoodStorage {
     groceries.remove(grocery);
   }
 
+  public ArrayList<Grocery> getGroceries() {
+    return groceries;
+  }
+
   /**
    * Retrieves a list of groceries with names matching the search parameter.
    *

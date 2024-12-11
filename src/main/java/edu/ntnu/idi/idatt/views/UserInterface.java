@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.views;
 
 import edu.ntnu.idi.idatt.modules.*;
+import edu.ntnu.idi.idatt.utils.*;
 
 /**
  * The UserInterface class.
@@ -15,4 +16,13 @@ public class UserInterface {
   private static final int ADD_GROCERY = 2;
   private static final int SEARCH_GROCERIES = 3;
   private static final int REMOVE_GROCERY = 4;
+  private static final int HANDLE_EXPIRED_GROCERIES = 5;
+  private static final int LIST_ALL_RECIPES = 6;
+  private static final int ADD_RECIPE = 7;
+  private static final int SEARCH_RECIPE = 8;
+  private static final int REMOVE_RECIPE = 9;
+  private static final int GET_TOTAL_STORAGE_VALUE = 10;
+  private static final int EXIT = 0;
+
+
 }
