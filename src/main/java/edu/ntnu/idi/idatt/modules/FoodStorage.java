@@ -1,13 +1,8 @@
 package edu.ntnu.idi.idatt.modules;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.SortedMap;
+import java.util.Collection;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 /**
  * The FoodStorage class manages a collection of {@code Grocery} objects.
@@ -17,17 +12,17 @@ import java.util.stream.Collectors;
  * @since 0.2
  */
 public class FoodStorage {
-  private final ArrayList<Grocery> groceries = new ArrayList<Grocery>();
+  private final TreeMap<String, Grocery> groceries = new TreeMap<>();
 
-  public void addGrocery(Grocery grocery) {
-    groceries.add(grocery);
+  public void addGrocery(String key, Grocery grocery) {
+    groceries.put(key, grocery);
   }
 
-  public void removeGrocery(Grocery grocery) {
-    groceries.remove(grocery);
+  public void removeGrocery(String key) {
+    groceries.remove(key);
   }
 
-  public ArrayList<Grocery> getGroceries() {
+  public TreeMap<String, Grocery> getGroceries() {
     return groceries;
   }
 
@@ -38,19 +33,20 @@ public class FoodStorage {
    * @return a Grocery object if found. otherwise returns null.
    */
   public Grocery searchGroceries(String searchString) {
-    return groceries.stream()
-        .filter(grocery -> grocery.getName().equals(searchString))
-        .findFirst().orElse(null);
+    return groceries.getOrDefault(searchString, null);
   }
 
   /**
-   * Retrieves an ArrayList of groceries containing all expired groceries based on today's LocalDate.
+   * Retrieves all expired groceries in the TreeMap by making a copy of the original TreeMap
+   * and removing any Keys past today's LocalDate.
    *
-   * @return An ArrayList of {@code Grocery} objects with dates before today's LocalDate.
+   * @return a TreeMap of Grocery objects with their names as keys.
    */
-  public ArrayList<Grocery> getExpiredGroceries() {
-    ArrayList<Grocery> expiredGroceries = groceries;
-    expiredGroceries.stream().peek(grocery -> grocery.expiryDates.tailMap(LocalDate.now()).clear())
+  public TreeMap<String, Grocery> getExpiredGroceries() {
+    TreeMap<String, Grocery> expiredGroceries = new TreeMap<>();
+    expiredGroceries.putAll(groceries);
+    expiredGroceries.values().stream()
+        .peek(grocery -> grocery.expiryDates.tailMap(LocalDate.now()).clear())
         .peek(Grocery::updateTotalAmount)
         .forEach(Grocery::updateTotalPrice);
     return expiredGroceries;
@@ -62,7 +58,7 @@ public class FoodStorage {
    * @param groceries An {@code ArrayList} of {@code Grocery} objects.
    * @return a double with the total price of given groceries.
    */
-  public double totalGroceriesValue(ArrayList<Grocery> groceries) {
+  public double totalGroceriesValue(Collection<Grocery> groceries) {
     double total = 0;
     for (Grocery grocery : groceries) {
       total += grocery.getTotalPrice();
@@ -71,11 +67,7 @@ public class FoodStorage {
   }
 
   public double totalFoodStorageValue() {
-    return totalGroceriesValue(groceries);
-  }
-
-  private void sortGroceriesByName() {
-    groceries.sort(Comparator.comparing(Grocery::getName));
+    return totalGroceriesValue(groceries.values());
   }
 
 }
