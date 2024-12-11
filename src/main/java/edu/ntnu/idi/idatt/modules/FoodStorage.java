@@ -3,17 +3,21 @@ package edu.ntnu.idi.idatt.modules;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
  * The FoodStorage class manages a collection of {@code Grocery} objects.
  *
  * @author bjberild
- * @version 0.2
+ * @version 0.4
  * @since 0.2
  */
 public class FoodStorage {
-  private final ArrayList<Grocery> groceries = new ArrayList<>();
+  private final ArrayList<Grocery> groceries = new ArrayList<Grocery>();
 
   public void addGrocery(Grocery grocery) {
     groceries.add(grocery);
@@ -28,28 +32,28 @@ public class FoodStorage {
   }
 
   /**
-   * Retrieves a list of groceries with names matching the search parameter.
+   * Retrieves a Grocery object based on a given String search parameter.
    *
    * @param searchString The name to be searched for.
-   * @return An ArrayList of {@code Grocery} objects with names matching the searchString.
+   * @return a Grocery object if found. otherwise returns null.
    */
-  public ArrayList<Grocery> searchGroceries(String searchString) {
-    sortGroceriesByDate();
-    return (ArrayList<Grocery>) groceries.stream()
+  public Grocery searchGroceries(String searchString) {
+    return groceries.stream()
         .filter(grocery -> grocery.getName().equals(searchString))
-        .collect(Collectors.toList());
+        .findFirst().orElse(null);
   }
 
   /**
-   * Retrieves a list of groceries containing all expired groceries based on today's date.
+   * Retrieves an ArrayList of groceries containing all expired groceries based on today's LocalDate.
    *
-   * @return An ArrayList of {@code Grocery} objects with dates before today's date.
+   * @return An ArrayList of {@code Grocery} objects with dates before today's LocalDate.
    */
   public ArrayList<Grocery> getExpiredGroceries() {
-    sortGroceriesByDate();
-    return (ArrayList<Grocery>) groceries.stream()
-        .filter(grocery -> grocery.getExpiryDate().isBefore(LocalDate.now()))
-        .collect(Collectors.toList());
+    ArrayList<Grocery> expiredGroceries = groceries;
+    expiredGroceries.stream().peek(grocery -> grocery.expiryDates.tailMap(LocalDate.now()).clear())
+        .peek(Grocery::updateTotalAmount)
+        .forEach(Grocery::updateTotalPrice);
+    return expiredGroceries;
   }
 
   /**
@@ -61,13 +65,13 @@ public class FoodStorage {
   public double totalGroceriesValue(ArrayList<Grocery> groceries) {
     double total = 0;
     for (Grocery grocery : groceries) {
-      total += grocery.getPrice();
+      total += grocery.getTotalPrice();
     }
     return total;
   }
 
-  private void sortGroceriesByDate() {
-    groceries.sort(Comparator.comparing(Grocery::getExpiryDate));
+  public double totalFoodStorageValue() {
+    return totalGroceriesValue(groceries);
   }
 
   private void sortGroceriesByName() {
