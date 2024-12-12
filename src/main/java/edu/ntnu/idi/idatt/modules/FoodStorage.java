@@ -79,6 +79,7 @@ public class FoodStorage {
   public double totalGroceriesValue(Collection<Grocery> groceries) {
     double total = 0;
     for (Grocery grocery : groceries) {
+      grocery.updateGrocery();
       total += grocery.getTotalPrice();
     }
     return total;

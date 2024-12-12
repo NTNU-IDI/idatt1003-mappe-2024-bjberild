@@ -255,6 +255,7 @@ public class UserInterface {
     String description = utils.inputString().toLowerCase();
     System.out.println("Type the instructions of the dish you want to add:");
     String instructions = utils.inputString().toLowerCase();
+    utils.clearNext();
     System.out.println("Type the amount of portions the recipe makes");
     int portions = utils.inputInt();
     System.out.println("Type the amount of different ingredients needed:");
@@ -263,10 +264,11 @@ public class UserInterface {
     for (int i = differentIngredients; i > 0; i--) {
       System.out.println("Type the name of the ingredient you want to add:");
       String ingredientName = utils.inputString().toLowerCase();
+      utils.clearNext();
       System.out.println("Type the amount needed of that ingredient:");
       double amountNeeded = utils.inputDouble();
       ingredients.put(ingredientName, amountNeeded);
-      System.out.println(differentIngredients + "ingredients left to add.");
+      System.out.println(differentIngredients + " ingredients left to add.");
     }
     Recipe recipe = new Recipe(name, description, instructions, ingredients, portions);
     recipeBook.addRecipe(recipe);
@@ -298,19 +300,20 @@ public class UserInterface {
     String name = utils.inputString().toLowerCase();
     Recipe recipe = recipeBook.getRecipeByName(name);
     if (recipe == null) {
-      System.out.println("Recipe not found.");
+      System.out.println("Recipe not found.\n");
     } else {
       recipeBook.removeRecipe(recipe);
-      System.out.println("Recipe removed.");
+      System.out.println("Recipe removed.\n");
     }
   }
 
   public void getTotalStorageValue() {
     double totalValue = foodStorage.totalFoodStorageValue();
-    System.out.println("Total storage value: " + totalValue);
+    System.out.println("Total storage value: " + totalValue + "\n");
   }
 
   public void updateAllGroceries() {
     groceryTreeMap.values().forEach(Grocery::updateGrocery);
+    System.out.println("All groceries updated.\n");
   }
 }
