@@ -32,6 +32,7 @@ public class UserInterface {
   private static final int REMOVE_RECIPE = 9;
   private static final int GET_TOTAL_STORAGE_VALUE = 10;
   private static final int UPDATE_ALL_GROCERIES = 11;
+  private static final int USABLE_RECIPES = 12;
   private static final int EXIT = 0;
   private final Utils utils = new Utils();
   private final RecipeBook recipeBook = new RecipeBook();
@@ -136,6 +137,9 @@ public class UserInterface {
           break;
         case UPDATE_ALL_GROCERIES:
           updateAllGroceries();
+          break;
+        case USABLE_RECIPES:
+          usableRecipes();
           break;
         case EXIT:
           System.out.println("Thanks for using the Food Waste Manager!");
@@ -315,5 +319,13 @@ public class UserInterface {
   public void updateAllGroceries() {
     groceryTreeMap.values().forEach(Grocery::updateGrocery);
     System.out.println("All groceries updated.\n");
+  }
+
+  public void usableRecipes() {
+    ArrayList<Recipe>recipes = recipeBook.getUsableRecipes();
+    System.out.println("These recipes can be used given your groceries:\n");
+    for (Recipe recipe : recipes) {
+      System.out.println(recipe.getName() + "\n");
+    }
   }
 }

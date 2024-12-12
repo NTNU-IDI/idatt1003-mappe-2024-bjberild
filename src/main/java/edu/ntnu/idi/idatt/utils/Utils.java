@@ -129,6 +129,7 @@ public class Utils {
         9. Remove a recipe
         10. Retrieve total value of groceries in storage
         11. Update all groceries
+        12. List usable recipes
         0. Exit program
         
         Please enter a number from 0-11.""");

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -55,18 +56,18 @@ public class FoodStorage {
   }
 
   /**
-   * Removes the ecpired Groceries based on today's date.
+   * Removes the expired Groceries based on today's date.
    */
   public void removeExpiredGroceries() {
-    for (Grocery grocery : groceries.values()) {
-      Set<LocalDate> expiryDates = grocery.getExpiryDates().keySet();
-      Iterator<LocalDate> expiryDatesIterator = expiryDates.iterator();
-      while (expiryDatesIterator.hasNext() && expiryDatesIterator.next()
-          .isBefore(LocalDate.now())) {
-        LocalDate expiryDate = expiryDatesIterator.next();
-        grocery.getExpiryDates().remove(expiryDate);
+    Collection<Grocery> tempGroceries = groceries.values();
+    for (Grocery grocery : tempGroceries) {
+      SortedMap<LocalDate, GroceryInstance> dates
+          = grocery.getExpiryDates().headMap(LocalDate.now());
+      Set<LocalDate> keys = dates.keySet();
+      for (LocalDate key : keys) {
+        grocery.removeExpiryDate(key);
       }
-
+      groceries.replace(grocery.getName(), grocery);
     }
   }
 
