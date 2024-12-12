@@ -5,11 +5,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /**
- * Utility class containing methods using java.util.Scanner to receive user input from the terminal.
- * The class also contains often printed Strings for the user menu.
+ * Utility class containing commonly used methods. For example parameter testing, input handling and
+ * printing commonly used Strings like the menu.
  *
  * @author bjberild
- * @version 0.3
+ * @version 0.5
  * @since 0.3
  */
 public class Utils {

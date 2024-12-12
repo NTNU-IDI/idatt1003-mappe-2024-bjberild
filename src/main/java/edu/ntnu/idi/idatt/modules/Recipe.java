@@ -7,7 +7,7 @@ import java.util.Set;
  * The Recipe class.
  *
  * @author bjberild
- * @version 0.4
+ * @version 0.5
  * @since 0.2
  */
 public class Recipe {

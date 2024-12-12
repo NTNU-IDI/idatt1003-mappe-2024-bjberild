@@ -23,9 +23,14 @@ public class UserInterface {
   private static final int REMOVE_RECIPE = 9;
   private static final int GET_TOTAL_STORAGE_VALUE = 10;
   private static final int EXIT = 0;
+  private final Utils utils = new Utils();
+  private RecipeBook recipeBook;
 
+  /**
+   * Initializes the application by creating a RecipeBook.
+   */
   public void init() {
-
+    this.recipeBook = new RecipeBook();
   }
 
   public void start() {}
