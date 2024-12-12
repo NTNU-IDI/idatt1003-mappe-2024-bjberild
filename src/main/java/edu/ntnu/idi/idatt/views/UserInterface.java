@@ -169,6 +169,7 @@ public class UserInterface {
    * GroceryInstance to ExpiryDate
    */
   public void addGrocery() {
+    utils.clearNext();
     System.out.println("Type in the name of the grocery you want to add:");
     String name = utils.inputString().toLowerCase();
     if (!groceryTreeMap.containsKey(name)) {
@@ -184,14 +185,10 @@ public class UserInterface {
       expiryDate = utils.inputDate();
     }
     double amount = 0;
-    while (amount <= 0) {
-      System.out.println("Type in the amount.");
-      amount = utils.inputDouble();
-      if (amount <= 0) {
-        System.out.println("The amount needs to be higher than zero");
-      }
-    }
-    System.out.println("Type in the price of the grocery.");
+    System.out.println("Type in the amount.");
+    utils.clearNext();
+    amount = utils.inputDouble();
+    System.out.println("Type in the price per unit of the grocery.");
     double price = utils.inputDouble();
     GroceryInstance instance = new GroceryInstance(price, amount);
     groceryTreeMap.get(name).addExpiryDate(expiryDate, instance);
@@ -201,6 +198,7 @@ public class UserInterface {
    * Searches for a grocery given a name.
    */
   public void searchGroceries() {
+    utils.clearNext();
     System.out.println("Type in the name of the grocery you want to search for:");
     String name = utils.inputString().toLowerCase();
     Grocery grocery = foodStorage.searchGroceries(name);
@@ -215,6 +213,7 @@ public class UserInterface {
    * Removes a grocery given a name.
    */
   public void removeGrocery() {
+    utils.clearNext();
     System.out.println("Type in the name of the grocery you want to remove:");
     String name = utils.inputString().toLowerCase();
     groceryTreeMap.remove(name);
@@ -224,6 +223,7 @@ public class UserInterface {
    * A method for handling expired goods by showing total value of all expired goods in FoodStorage.
    */
   public void handleExpiredGroceries() {
+    utils.clearNext();
     TreeMap<String, Grocery> expiredGroceries;
     expiredGroceries = foodStorage.getExpiredGroceries();
     double total = foodStorage.totalGroceriesValue(expiredGroceries.values());
@@ -248,6 +248,7 @@ public class UserInterface {
    * Asks the user for user input to make a recipe to then add into RecipeBook.
    */
   public void addRecipe() {
+    utils.clearNext();
     System.out.println("Type in the name of the recipe you want to add:");
     String name = utils.inputString().toLowerCase();
     System.out.println("Type the description of the dish you want to add:");
@@ -276,6 +277,7 @@ public class UserInterface {
    * Searches for a recipe by its name given a String.
    */
   public void searchRecipe() {
+    utils.clearNext();
     System.out.println("Type in the name of the recipe you want to search:");
     String name = utils.inputString().toLowerCase();
     Recipe recipe = recipeBook.getRecipeByName(name);
@@ -291,6 +293,7 @@ public class UserInterface {
    * Removes a Recipe based on a given name.
    */
   public void removeRecipe() {
+    utils.clearNext();
     System.out.println("Type in the name of the recipe you want to remove:");
     String name = utils.inputString().toLowerCase();
     Recipe recipe = recipeBook.getRecipeByName(name);

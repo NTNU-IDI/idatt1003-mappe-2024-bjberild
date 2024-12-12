@@ -120,8 +120,8 @@ public class Grocery {
    */
   public String printableGroceryString() {
     updateGrocery();
-    return ("Name: " + name + "Unit: " + unit + "Amount: " + totalAmount
-        + "Price: " + totalPrice);
+    return ("Name: " + name + " Unit: " + unit + " Amount: " + totalAmount
+        + " Price: " + totalPrice);
   }
 
   @Override

@@ -2,6 +2,8 @@ package edu.ntnu.idi.idatt.modules;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -52,9 +54,20 @@ public class FoodStorage {
     return expiredGroceries;
   }
 
+  /**
+   * Removes the ecpired Groceries based on today's date.
+   */
   public void removeExpiredGroceries() {
-    groceries.values().forEach(grocery
-        -> grocery.getExpiryDates().headMap(LocalDate.now()).clear());
+    for (Grocery grocery : groceries.values()) {
+      Set<LocalDate> expiryDates = grocery.getExpiryDates().keySet();
+      Iterator<LocalDate> expiryDatesIterator = expiryDates.iterator();
+      while (expiryDatesIterator.hasNext() && expiryDatesIterator.next()
+          .isBefore(LocalDate.now())) {
+        LocalDate expiryDate = expiryDatesIterator.next();
+        grocery.getExpiryDates().remove(expiryDate);
+      }
+
+    }
   }
 
   /**

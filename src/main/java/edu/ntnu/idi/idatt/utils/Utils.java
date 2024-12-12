@@ -78,6 +78,10 @@ public class Utils {
     return scanner.nextLine();
   }
 
+  public void clearNext() {
+    scanner.nextLine();
+  }
+
   /**
    * Method for getting LocalDate variables from user input.
    *
