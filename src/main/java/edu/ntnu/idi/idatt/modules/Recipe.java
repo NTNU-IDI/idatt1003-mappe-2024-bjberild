@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.modules;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * The Recipe class.
@@ -55,4 +56,5 @@ public class Recipe {
   public int getPortions() {
     return portions;
   }
+
 }
