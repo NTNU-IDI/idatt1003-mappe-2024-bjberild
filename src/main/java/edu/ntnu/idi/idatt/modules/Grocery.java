@@ -1,7 +1,10 @@
 package edu.ntnu.idi.idatt.modules;
 
+import static edu.ntnu.idi.idatt.utils.Utils.verifyStringParameter;
+
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.TreeMap;
 
 /**
@@ -22,22 +25,20 @@ public class Grocery {
    * lowest/earliest date. The values are a custom class for the purpose of having a pair of values
    * attached to the same key/date in the Treemap.
    */
-  private final TreeMap<LocalDate, GroceryInstance> expiryDates;
+  private final TreeMap<LocalDate, GroceryInstance> expiryDates = new TreeMap<>();
 
   /**
    * Constructor for the Grocery class.
    *
-   * @param name is the name of the grocery.
-   * @param unit is String declaring a given unit that grocery will be measured as, e.g. grams or
-   *             liters.
-   * @param amount is a double for the totalAmount of the given unit.
-   * @param price is a double representing the price per unit the grocery was bought for.
-   * @param expiryDate is a {@code LocalDate} representing the expiry date of the grocery.
+   * @param name a String for the name of the grocery.
+   * @param unit a String declaring a given unit that grocery will be measured as, e.g. kilograms,
+   *             pieces or liters.
    */
-  public Grocery(String name, String unit, double amount, double price, LocalDate expiryDate) {
+  public Grocery(String name, String unit) {
+    verifyStringParameter(name, "Name");
+    verifyStringParameter(unit, "Unit");
     this.name = name;
     this.unit = unit;
-    this.expiryDates = new TreeMap<>();
   }
 
   public String getName() {
@@ -92,8 +93,35 @@ public class Grocery {
     updateTotalPrice();
   }
 
+  public void addExpiryDate(LocalDate date, GroceryInstance instance) {
+    expiryDates.put(date, instance);
+  }
+
   public void removeExpiryDate(LocalDate expiryDate) {
     expiryDates.remove(expiryDate);
+  }
+
+  /**
+   * Method that removes empty instances of the grocery.
+   */
+  public void removeEmptyExpiryDate() {
+    Iterator<LocalDate> iterator = expiryDates.keySet().iterator();
+    while (iterator.hasNext()) {
+      LocalDate expiryDate = iterator.next();
+      GroceryInstance instance = expiryDates.get(expiryDate);
+      if (instance.getAmount() <= 0) {
+        iterator.remove();
+      }
+    }
+  }
+
+  /**
+   * Outputs a String for the Grocery object which is meant to be printed out.
+   */
+  public String printableGroceryString() {
+    updateGrocery();
+    return ("Name: " + name + "Unit: " + unit + "Amount: " + totalAmount
+        + "Price: " + totalPrice);
   }
 
   @Override

@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.modules;
 
-
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -27,6 +27,64 @@ public class RecipeBook {
 
   public ArrayList<Recipe> getRecipes() {
     return recipes;
+  }
+
+  public FoodStorage getFoodStorage() {
+    return foodStorage;
+  }
+
+  /**
+   * Search method using a given name to find the recipe.
+   * Return null if no recipe is found.
+   *
+   * @param name String representing name of recipe to be found
+   * @return Recipe or null if no recipe is found.
+   */
+  public Recipe getRecipeByName(String name) {
+    for (Recipe recipe : recipes) {
+      if (recipe.getName().equals(name)) {
+        return recipe;
+      }
+    }
+    return null;
+  }
+
+
+  /**
+   * Method for removing a set amount of a given grocery. Works by making a copy of the Grocery,
+   * then replacing the original with the adjusted copy.
+   * If the amount to be removed is bigger than the amount available in the Grocery then the method
+   * removes the Grocery from the TreeMap.
+   *
+   * @param name String of the name of the grocery that gets adjusted.
+   * @param amount A double of the amount that gets adjusted.
+   */
+  public void removeAmountOfGroceries(String name, double amount) {
+    try {
+      double groceryAmount = foodStorage.getGroceries().get(name).getTotalAmount();
+      if (groceryAmount < amount) {
+        foodStorage.getGroceries().remove(name);
+      } else {
+        Grocery grocery = foodStorage.getGroceries().get(name);
+        double remainingAmount = amount;
+        Iterator<LocalDate> iterator = grocery.getExpiryDates().keySet().iterator();
+        while (iterator.hasNext() && remainingAmount > 0) {
+          LocalDate expiryDate = iterator.next();
+          GroceryInstance instance = grocery.getExpiryDates().get(expiryDate);
+          if (instance.getAmount() >= remainingAmount) {
+            iterator.remove();
+            remainingAmount -= instance.getAmount();
+          } else {
+            instance.setAmount(instance.getAmount() - remainingAmount);
+          }
+        }
+        foodStorage.getGroceries().replace(name, grocery);
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      System.out.println("Something went wrong");
+    }
+
   }
 
   /**
