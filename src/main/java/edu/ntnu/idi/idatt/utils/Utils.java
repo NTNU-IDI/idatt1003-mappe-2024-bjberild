@@ -50,6 +50,22 @@ public class Utils {
   }
 
   /**
+   *  Simple method to avoid exceptions when scanning for doubles.
+   *  Uses Scanner.nextLine() before returning to get rid of the line break that gets left behind
+   *  after specific next methods of Scanners.
+   *
+   * @return a double from the user.
+   */
+  public double inputDouble() {
+    while (!scanner.hasNextDouble()) {
+      System.out.println("Invalid number, try again");
+      scanner.next();
+    }
+    scanner.nextLine();
+    return scanner.nextDouble();
+  }
+
+  /**
    * Simple method to avoid exceptions when scanning for user input in the terminal.
    *
    * @return a String from the user.

@@ -9,6 +9,7 @@ import edu.ntnu.idi.idatt.utils.Utils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.TreeMap;
 
 /**
@@ -95,37 +96,53 @@ public class UserInterface {
 
   }
 
+  /**
+   * Method to start the app.
+   */
   public void start() {
-
     boolean finished = false;
     while (!finished) {
       int menuChoice = utils.showMenu();
       switch (menuChoice) {
         case LIST_ALL_GROCERIES:
+          listAllGroceries();
           break;
         case ADD_GROCERY:
+          addGrocery();
           break;
         case SEARCH_GROCERIES:
+          searchGroceries();
           break;
         case REMOVE_GROCERY:
+          removeGrocery();
           break;
         case HANDLE_EXPIRED_GROCERIES:
+          handleExpiredGroceries();
           break;
         case LIST_ALL_RECIPES:
+          listAllRecipes();
           break;
         case ADD_RECIPE:
+          addRecipe();
           break;
         case SEARCH_RECIPE:
+          searchRecipe();
           break;
         case REMOVE_RECIPE:
+          removeRecipe();
           break;
         case GET_TOTAL_STORAGE_VALUE:
+          getTotalStorageValue();
           break;
         case UPDATE_ALL_GROCERIES:
+          updateAllGroceries();
           break;
         case EXIT:
           System.out.println("Thanks for using the Food Waste Manager!");
           finished = true;
+          break;
+        default:
+          System.out.println("Invalid choice");
           break;
       }
     }
@@ -145,5 +162,152 @@ public class UserInterface {
       }
       System.out.println("\n");
     }
+  }
+
+  /**
+   * Adds a grocery object if the name doesn't exist in FoodStorage. Else it adds a LocalDate and
+   * GroceryInstance to ExpiryDate
+   */
+  public void addGrocery() {
+    System.out.println("Type in the name of the grocery you want to add:");
+    String name = utils.inputString().toLowerCase();
+    if (!groceryTreeMap.containsKey(name)) {
+      System.out.println("""
+          Type in the unit of the grocery. Choose between kilograms, liters and pieces.""");
+      String unit;
+      unit = utils.inputString().toLowerCase();
+      foodStorage.getGroceries().put(name, new Grocery(name, unit));
+    }
+    LocalDate expiryDate = null;
+    while (expiryDate == null) {
+      System.out.println("Type in the expiry date");
+      expiryDate = utils.inputDate();
+    }
+    double amount = 0;
+    while (amount <= 0) {
+      System.out.println("Type in the amount.");
+      amount = utils.inputDouble();
+      if (amount <= 0) {
+        System.out.println("The amount needs to be higher than zero");
+      }
+    }
+    System.out.println("Type in the price of the grocery.");
+    double price = utils.inputDouble();
+    GroceryInstance instance = new GroceryInstance(price, amount);
+    groceryTreeMap.get(name).addExpiryDate(expiryDate, instance);
+  }
+
+  /**
+   * Searches for a grocery given a name.
+   */
+  public void searchGroceries() {
+    System.out.println("Type in the name of the grocery you want to search for:");
+    String name = utils.inputString().toLowerCase();
+    Grocery grocery = foodStorage.searchGroceries(name);
+    if (grocery == null) {
+      System.out.println("Couldn't find grocery.");
+    } else {
+      System.out.println(grocery.printableGroceryString());
+    }
+  }
+
+  /**
+   * Removes a grocery given a name.
+   */
+  public void removeGrocery() {
+    System.out.println("Type in the name of the grocery you want to remove:");
+    String name = utils.inputString().toLowerCase();
+    groceryTreeMap.remove(name);
+  }
+
+  /**
+   * A method for handling expired goods by showing total value of all expired goods in FoodStorage.
+   */
+  public void handleExpiredGroceries() {
+    TreeMap<String, Grocery> expiredGroceries;
+    expiredGroceries = foodStorage.getExpiredGroceries();
+    double total = foodStorage.totalGroceriesValue(expiredGroceries.values());
+    System.out.println("Total expired groceries worth: " + total);
+    System.out.println("Want to remove all expired groceries? Type (y/n)");
+    String yesNo = utils.inputString().toLowerCase();
+    while (!(yesNo.equals("y") || yesNo.equals("n"))) {
+      System.out.println("Type in y or n");
+      yesNo = utils.inputString().toLowerCase();
+    }
+    if (yesNo.equals("y")) {
+      foodStorage.removeExpiredGroceries();
+      System.out.println("Removed all expired groceries");
+    }
+  }
+
+  public void listAllRecipes() {
+    recipeBook.getRecipes().forEach(recipe -> System.out.println(recipe.getName() + "\n"));
+  }
+
+  /**
+   * Asks the user for user input to make a recipe to then add into RecipeBook.
+   */
+  public void addRecipe() {
+    System.out.println("Type in the name of the recipe you want to add:");
+    String name = utils.inputString().toLowerCase();
+    System.out.println("Type the description of the dish you want to add:");
+    String description = utils.inputString().toLowerCase();
+    System.out.println("Type the instructions of the dish you want to add:");
+    String instructions = utils.inputString().toLowerCase();
+    System.out.println("Type the amount of portions the recipe makes");
+    int portions = utils.inputInt();
+    System.out.println("Type the amount of different ingredients needed:");
+    int differentIngredients = utils.inputInt();
+    HashMap<String, Double> ingredients = new HashMap<String, Double>();
+    for (int i = differentIngredients; i > 0; i--) {
+      System.out.println("Type the name of the ingredient you want to add:");
+      String ingredientName = utils.inputString().toLowerCase();
+      System.out.println("Type the amount needed of that ingredient:");
+      double amountNeeded = utils.inputDouble();
+      ingredients.put(ingredientName, amountNeeded);
+      System.out.println(differentIngredients + "ingredients left to add.");
+    }
+    Recipe recipe = new Recipe(name, description, instructions, ingredients, portions);
+    recipeBook.addRecipe(recipe);
+    System.out.println("Recipe added.");
+  }
+
+  /**
+   * Searches for a recipe by its name given a String.
+   */
+  public void searchRecipe() {
+    System.out.println("Type in the name of the recipe you want to search:");
+    String name = utils.inputString().toLowerCase();
+    Recipe recipe = recipeBook.getRecipeByName(name);
+    if (recipe == null) {
+      System.out.println("Recipe not found.");
+    } else {
+      System.out.println("Found recipe: " + recipe.getName());
+
+    }
+  }
+
+  /**
+   * Removes a Recipe based on a given name.
+   */
+  public void removeRecipe() {
+    System.out.println("Type in the name of the recipe you want to remove:");
+    String name = utils.inputString().toLowerCase();
+    Recipe recipe = recipeBook.getRecipeByName(name);
+    if (recipe == null) {
+      System.out.println("Recipe not found.");
+    } else {
+      recipeBook.removeRecipe(recipe);
+      System.out.println("Recipe removed.");
+    }
+  }
+
+  public void getTotalStorageValue() {
+    double totalValue = foodStorage.totalFoodStorageValue();
+    System.out.println("Total storage value: " + totalValue);
+  }
+
+  public void updateAllGroceries() {
+    groceryTreeMap.values().forEach(Grocery::updateGrocery);
   }
 }
