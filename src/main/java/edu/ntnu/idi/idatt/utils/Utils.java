@@ -21,16 +21,16 @@ public class Utils {
   private void printMenu() {
     System.out.println("""
         ~~~~~~ Food Waste Manager ~~~~~~~
-        1. List all groceries
+        1. List all groceryNames
         2. Add a grocery
-        3. Search groceries
+        3. Search groceryNames
         4. Remove a grocery
-        5. Handle expired groceries
+        5. Handle expired groceryNames
         6. List all recipes
         7. Add a recipe
         8. Search recipes
         9. Remove a recipe
-        10. Retrieve total value of groceries
+        10. Retrieve total value of groceryNames
         0. Exit program
         
         Please enter a number between 0-10.""");

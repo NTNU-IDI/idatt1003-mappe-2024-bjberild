@@ -9,9 +9,6 @@ import java.util.TreeMap;
  * with information regarding its name, unit, totalAmount, totalPrice and a
  * TreeMap of expiryDates with amount and price values through the {@code GroceryInstance} class.
  *
- * <p>Contains a constructor to create a grocery.
- * Has getters for each parameter and setters for unit and totalAmount.</p>
- *
  * @author bjberild
  * @version 0.4
  * @since 0.1
@@ -25,7 +22,7 @@ public class Grocery {
    * lowest/earliest date. The values are a custom class for the purpose of having a pair of values
    * attached to the same key/date in the Treemap.
    */
-  protected TreeMap<LocalDate, GroceryInstance> expiryDates;
+  private final TreeMap<LocalDate, GroceryInstance> expiryDates;
 
   /**
    * Constructor for the Grocery class.
@@ -40,7 +37,7 @@ public class Grocery {
   public Grocery(String name, String unit, double amount, double price, LocalDate expiryDate) {
     this.name = name;
     this.unit = unit;
-    this.expiryDates = new TreeMap<LocalDate, GroceryInstance>();
+    this.expiryDates = new TreeMap<>();
   }
 
   public String getName() {
@@ -88,6 +85,11 @@ public class Grocery {
       totalPrice += instance.getAmount() * instance.getPricePerUnit();
     }
     this.totalPrice = totalPrice;
+  }
+
+  public void updateGrocery() {
+    updateTotalAmount();
+    updateTotalPrice();
   }
 
   public void removeExpiryDate(LocalDate expiryDate) {

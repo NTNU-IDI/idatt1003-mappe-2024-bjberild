@@ -46,10 +46,15 @@ public class FoodStorage {
     TreeMap<String, Grocery> expiredGroceries = new TreeMap<>();
     expiredGroceries.putAll(groceries);
     expiredGroceries.values().stream()
-        .peek(grocery -> grocery.expiryDates.tailMap(LocalDate.now()).clear())
+        .peek(grocery -> grocery.getExpiryDates().tailMap(LocalDate.now()).clear())
         .peek(Grocery::updateTotalAmount)
         .forEach(Grocery::updateTotalPrice);
     return expiredGroceries;
+  }
+
+  public void removeExpiredGroceries() {
+    groceries.values().forEach(grocery
+        -> grocery.getExpiryDates().headMap(LocalDate.now()).clear());
   }
 
   /**

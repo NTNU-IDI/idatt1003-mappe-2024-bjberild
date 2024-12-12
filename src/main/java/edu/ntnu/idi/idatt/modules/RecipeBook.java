@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public class RecipeBook {
   private final ArrayList<Recipe> recipes = new ArrayList<>();
+  private final FoodStorage foodStorage = new FoodStorage();
 
   public void addRecipe(Recipe recipe) {
     recipes.add(recipe);
@@ -24,4 +25,6 @@ public class RecipeBook {
   public ArrayList<Recipe> getRecipes() {
     return recipes;
   }
+
+
 }

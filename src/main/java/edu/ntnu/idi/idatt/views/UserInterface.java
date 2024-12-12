@@ -24,5 +24,9 @@ public class UserInterface {
   private static final int GET_TOTAL_STORAGE_VALUE = 10;
   private static final int EXIT = 0;
 
+  public void init() {
 
+  }
+
+  public void start() {}
 }
